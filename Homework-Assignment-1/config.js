@@ -1,23 +1,30 @@
-//object of environments
-var envi = {};
+/*
+*create and export configuration variables  
+*
+*/
 
-envi.staging = {
-    'httpPort' : '1016',
-    'httpsPort' : '1023',
+//container for all the environments
+var environments = {};
+
+//staging (default) environment
+environments.staging = {
+    'httpPort' : 3000,
+    'httpsPort' : 3001,
     'envName' : 'staging'
 };
 
-envi.production = {
-    'httpPort' : '3010',
-    'httpsPort' : '8080',
+//production environment
+environments.production = {
+    'httpPort' : 80,
+    'httpsPort' : 443,
     'envName' : 'production'
 };
 
-//determine which environments was passed on a cli argument, if none, return null
-var decision = typeof(process.env.NODE_ENV) == 'string' ? process.env.NODE_ENV.toLocaleLowerCase() : '';
+//determine which environment was passed as a command-line argument
+var currentEnvironment = typeof(process.env.NODE_ENV) == 'string' ? process.env.NODE_ENV.toLowerCase() : '';
 
-//check that the current env is one of the above envi, if not, default to staging
-var finalOut = typeof(envi[decision]) == 'object' ? envi[decision] : envi.staging;
+//check that the current environment is one of the environments above, if not default to staging
+var environmentToExport = typeof(environments[currentEnvironment]) == 'object' ? environments[currentEnvironment] : environments.staging;
 
-//exporting
-module.exports = finalOut;
+//export the module
+module.exports = environmentToExport;
